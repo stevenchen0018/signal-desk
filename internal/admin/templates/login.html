@@ -1,0 +1,30 @@
+{{define "login"}}
+<main class="login-shell">
+  <section class="login-intro" aria-labelledby="intro-title">
+    <div class="brand">
+      <span class="brand-mark">{{template "icon" "pulse"}}</span>
+      <span>Signal Desk</span>
+    </div>
+    <div class="login-intro-content">
+      <h2 id="intro-title">集中管理邮件、<br>模型变更与通知</h2>
+      <ul class="login-features">
+        <li><strong>邮件规则</strong><span>按邮件主题筛选，提取正文中的指定字段</span></li>
+        <li><strong>模型监控</strong><span>定时检查 ModelVerse，记录模型上线与下线</span></li>
+        <li><strong>通知投递</strong><span>按模板发送到邮件、飞书或 Webhook</span></li>
+      </ul>
+    </div>
+  </section>
+  <section class="login-main" aria-labelledby="login-title">
+    <div class="login-panel">
+      <h1 id="login-title">管理员登录</h1>
+      <p class="login-description">使用管理员账号访问 Signal Desk 控制台</p>
+      {{template "notices" .}}
+      <form class="login-form" method="post" action="/login">
+        <label>用户名<input name="username" value="{{.Username}}" placeholder="请输入用户名" autocomplete="username" required autofocus></label>
+        <label>密码<input name="password" type="password" placeholder="请输入密码" autocomplete="current-password" required></label>
+        <button class="button primary" type="submit">登录后台</button>
+      </form>
+    </div>
+  </section>
+</main>
+{{end}}

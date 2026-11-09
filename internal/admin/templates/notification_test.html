@@ -1,0 +1,44 @@
+{{define "notification-test"}}
+<section class="panel form-panel">
+  <div class="section-heading row">
+    <div><h2>测试设置</h2><p>使用已保存的模板和渠道。预览只渲染内容，确认发送后才会投递。</p></div>
+    <a class="text-link" href="/traces?kind=notification_test">查看通知测试记录 {{template "icon" "arrow"}}</a>
+  </div>
+  {{with .NotificationTest}}
+  {{if and .HasTemplates .HasChannels}}
+  <form action="/notification-test" method="post" class="settings-form notification-test-form">
+    <input type="hidden" name="csrf" value="{{$.CSRF}}">
+    <section class="form-group">
+      <h3>模板与接收目标</h3>
+      <div class="form-grid">{{range .Selection}}{{template "field" .}}{{end}}</div>
+    </section>
+    <section class="form-group">
+      <h3>示例数据（可选）</h3>
+      <p>模拟模型监控或邮件提取结果，测试模板变量。</p>
+      <div class="form-grid">{{range .Sample}}{{template "field" .}}{{end}}</div>
+    </section>
+    {{with .Preview}}
+    <section class="form-group" aria-label="通知预览">
+      <h3>通知预览</h3>
+      <p>接收目标</p><pre class="payload trace-payload">{{$.NotificationTest.Destination}}</pre>
+      <p>标题</p><pre class="payload trace-payload">{{.Title}}</pre>
+      <p>{{if eq .BodyFormat "html"}}正文（渲染后的 HTML 源码）{{else}}正文（纯文本）{{end}}</p>
+      <pre class="payload trace-payload">{{.Body}}</pre>
+    </section>
+    {{end}}
+    <div class="form-actions">
+      <button class="button" name="action" value="preview" type="submit">预览内容</button>
+      <button class="button primary" name="action" value="send" type="submit"
+        data-confirm="发送真实测试通知到当前所选渠道？邮件渠道会向其中所有目标邮箱发送。">发送测试</button>
+    </div>
+  </form>
+  {{else}}
+  <div class="empty">
+    <strong>请先配置测试所需项目</strong>
+    {{if not .HasTemplates}}<p><a class="text-link" href="/templates">添加或启用通知模板</a></p>{{end}}
+    {{if not .HasChannels}}<p><a class="text-link" href="/channels">添加或启用通知渠道</a>，或先保存 <a class="text-link" href="/smtp">发信服务器</a> 配置。</p>{{end}}
+  </div>
+  {{end}}
+  {{end}}
+</section>
+{{end}}
